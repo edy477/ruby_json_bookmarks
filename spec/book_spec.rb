@@ -31,7 +31,7 @@ describe BookMarkAnalyzer do
   end
 
   it 'best_performant_sites should  return a valid output for test case 1 ' do
-    output = [['cl', 39_870], ['pe', 24_403], ['co', 24_403], ['mx', 24_403], ['us', 15_467]]
+    output = [['cl', 39870], ['pe', 24403], ['co', 24403], ['mx', 24403], ['us', 15467]]
 
     allow(bookmarks).to receive(:best_performant_sites).with(1).and_return(output)
     expect(bookmarks.best_performant_sites(6)).to eq(output)

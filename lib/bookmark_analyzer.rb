@@ -3,7 +3,7 @@
 require 'faraday'
 require 'json'
 require 'date'
-
+# Main Class
 class BookMarkAnalyzer
   attr_reader :bookmarks
 
@@ -17,12 +17,14 @@ class BookMarkAnalyzer
   def most_bookmarked_projects(site, month)
     filtered_by_site = @bookmarks.select { |element| element[:sites].include? site }
 
+    #filtered by month with select
     filtered_by_site.select do |item|
       item[:bookmarks].each do |x|
         if get_date_format(x[:created_at]) == month
         end
       end
     end
+    # sorted by the length of bookmarks and extracting the titles
     filtered_by_site.sort_by { |x| x[:bookmarks].length }.map { |x| x[:title] }.reverse!
   end
 
@@ -35,15 +37,15 @@ class BookMarkAnalyzer
   end
 
   def best_performant_sites(month)
-    filtered_by_month = @bookmarks.select { |x| Date.parse(x[:created_at]).strftime('%m').to_i == month }
+    filtered_by_month = @bookmarks.select { |x| get_date_format(x[:created_at]) == month }
     sites = filtered_by_month.map { |m| m[:sites] }.flatten.uniq
-    temp = []
+    list = []
     sites.each do |x|
-      temp.push([x, filtered_by_month.select do |tp|
+      list.push([x, filtered_by_month.select do |tp|
                       tp[:sites].include? x
                     end.map { |x| x[:pageviews].to_i }.reduce(0) { |sum, count| sum + count }])
     end
-    temp.sort_by { |x| [x[1]] }
+    list.sort_by { |x| x[1] }.reverse!
   end
 
   def bookmarks_per_month(month)
@@ -57,5 +59,5 @@ books = BookMarkAnalyzer.new
 
 # books.print_bookmarks
 # p books.most_bookmarked_projects('cl', 6)
-# p books.best_performant_sites(6)
+#p books.best_performant_sites(6)
 # p books.bookmarks_per_month(6)

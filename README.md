@@ -1,8 +1,9 @@
 # ruby_json_bookmarks
-**Packages
--  Faraday for htpp request
--
-- Respec for tests
+
+##Packages
+- Faraday 
+- JSON gem
+- Rspec for tests
 - Rubocop
 ## Run tests
-run test wit `rspec`
+run tests wit `rspec`
