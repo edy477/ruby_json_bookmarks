@@ -6,7 +6,8 @@ require 'date'
 
 class BookMarkAnalyzer
   attr_reader :bookmarks
-  BASE_URL='https://gist.githubusercontent.com/diegoacuna/47740d1d76f06aa8ced9a0db448e90a5/raw/576ea6d802741c21ef600995763e69661b254fb8/coding_challenge_endpoint.json'
+
+  BASE_URL = 'https://gist.githubusercontent.com/diegoacuna/47740d1d76f06aa8ced9a0db448e90a5/raw/576ea6d802741c21ef600995763e69661b254fb8/coding_challenge_endpoint.json'
 
   def initialize
     response = Faraday.get(BASE_URL)
@@ -42,8 +43,7 @@ class BookMarkAnalyzer
                       tp[:sites].include? x
                     end.map { |x| x[:pageviews].to_i }.reduce(0) { |sum, count| sum + count }])
     end
-     temp.sort_by { |x| [x[1]] }
-
+    temp.sort_by { |x| [x[1]] }
   end
 
   def bookmarks_per_month(month)
@@ -56,6 +56,6 @@ end
 books = BookMarkAnalyzer.new
 
 # books.print_bookmarks
-p books.most_bookmarked_projects('cl', 6)
-p books.best_performant_sites(6)
-p books.bookmarks_per_month(6)
+# p books.most_bookmarked_projects('cl', 6)
+# p books.best_performant_sites(6)
+# p books.bookmarks_per_month(6)
