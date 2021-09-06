@@ -6,17 +6,19 @@ require 'date'
 
 class BookMarkAnalyzer
   attr_reader :bookmarks
+  BASE_URL='https://gist.githubusercontent.com/diegoacuna/47740d1d76f06aa8ced9a0db448e90a5/raw/576ea6d802741c21ef600995763e69661b254fb8/coding_challenge_endpoint.json'
 
   def initialize
-    response = Faraday.get('https://gist.githubusercontent.com/diegoacuna/47740d1d76f06aa8ced9a0db448e90a5/raw/576ea6d802741c21ef600995763e69661b254fb8/coding_challenge_endpoint.json')
+    response = Faraday.get(BASE_URL)
     @bookmarks = JSON.parse(response.body, symbolize_names: true)
   end
 
   def most_bookmarked_projects(site, month)
     filtered_by_site = @bookmarks.select { |element| element[:sites].include? site }
+
     filtered_by_site.select do |item|
       item[:bookmarks].each do |x|
-        if Date.parse(x[:created_at]).strftime('%m').to_i == month
+        if get_date_format(x[:created_at]) == month
         end
       end
     end
@@ -40,16 +42,14 @@ class BookMarkAnalyzer
                       tp[:sites].include? x
                     end.map { |x| x[:pageviews].to_i }.reduce(0) { |sum, count| sum + count }])
     end
+     temp.sort_by { |x| [x[1]] }
 
-    return temp.sort_by{|x| [x[1]]}
-    nil
   end
-
 
   def bookmarks_per_month(month)
     @bookmarks.map do |x|
       x[:bookmarks]
-    end.flatten.select { |x| Date.parse(x[:created_at]).strftime('%m').to_i == month }.length
+    end.flatten.select { |x| get_date_format(x[:created_at]) == month }.length
   end
 end
 
